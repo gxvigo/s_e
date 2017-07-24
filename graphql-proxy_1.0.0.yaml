@@ -1,0 +1,111 @@
+swagger: '2.0'
+info:
+  x-ibm-name: queryql-proxy
+  title: queryql-proxy
+  version: 1.0.0
+schemes:
+  - https
+host: $(catalog.host)
+basePath: /proxy
+consumes:
+  - application/json
+produces:
+  - application/json
+securityDefinitions:
+  clientIdHeader:
+    type: apiKey
+    in: header
+    name: X-IBM-Client-Id
+security:
+  - clientIdHeader: []
+x-ibm-configuration:
+  testable: true
+  enforced: true
+  cors:
+    enabled: true
+  assembly:
+    execute:
+      - operation-switch:
+          title: operation-switch
+          case:
+            - operations:
+                - verb: post
+                  path: /resources
+              execute:
+                - gatewayscript:
+                    title: gatewayscript
+                    version: 1.0.0
+                    source: >-
+                      //apim.setvariable('message.body',apim.getvariable('generated-jwt'));  
+
+
+                      console.warn('### queryql');
+
+                      console.warn('### message.body: ' + 
+                      apim.getvariable('message.body'));
+                - invoke:
+                    target-url: 'http://9.203.5.104:3000/graphql'
+            - operations:
+                - verb: post
+                  path: /resources-assembly-query
+              execute:
+                - gatewayscript:
+                    title: gatewayscript
+                    version: 1.0.0
+                    source: >-
+                      console.warn('### queryql');
+
+
+                      //APIC: get the payload
+
+                      var queryql = {"query": "{ hello }"};
+
+                      console.warn('queryql obj: ' + JSON.stringify(queryql));
+
+
+
+                      //APIC: set the payload
+
+                      apim.setvariable('message.body', queryql);
+
+
+                      apim.setvariable('message.headers.content-type',
+                      'application/json');
+
+
+                      //apim.setvariable('message.body',apim.getvariable('generated-jwt'));  
+
+
+                      console.warn('### message.body: ' + 
+                      JSON.stringify(apim.getvariable('message.body')));
+                - invoke:
+                    target-url: 'http://9.203.5.104:3000/graphql'
+                    verb: POST
+          otherwise: []
+          version: 1.0.0
+    catch: []
+  gateway: datapower-gateway
+  properties:
+    qlserver:
+      value: 'http://127.0.0.1:3000'
+      description: ''
+      encoded: false
+paths:
+  /resources-assembly-query:
+    post:
+      responses:
+        '200':
+          description: 200 OK
+  /resources:
+    post:
+      responses:
+        '200':
+          description: 200 OK
+      parameters:
+        - name: queryql
+          required: false
+          in: body
+          schema:
+            type: object
+definitions: {}
+tags: []

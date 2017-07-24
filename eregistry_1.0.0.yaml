@@ -1,0 +1,161 @@
+swagger: '2.0'
+info:
+  x-ibm-name: eregistry
+  title: eregistry
+  version: 1.0.0
+schemes:
+  - https
+host: $(catalog.host)
+basePath: /api
+consumes:
+  - application/json
+produces:
+  - application/json
+securityDefinitions:
+  clientIdHeader:
+    type: apiKey
+    in: header
+    name: X-IBM-Client-Id
+security:
+  - clientIdHeader: []
+x-ibm-configuration:
+  testable: true
+  enforced: true
+  cors:
+    enabled: true
+  assembly:
+    execute:
+      - operation-switch:
+          title: operation-switch
+          case:
+            - operations:
+                - verb: post
+                  path: /login
+              execute:
+                - invoke:
+                    target-url: 'https://eregistrytest.trustees.co.nz/server/api/v1/login'
+            - operations:
+                - verb: post
+                  path: /graphql-passing-query
+              execute:
+                - invoke:
+                    target-url: 'https://eregistrytest.trustees.co.nz/server/api/v1/graphql'
+            - operations:
+                - verb: post
+                  path: /graphql-hardcoded-query
+              execute:
+                - gatewayscript:
+                    title: gatewayscript
+                    version: 1.0.0
+                    source: >-
+                      console.warn('### queryql');
+
+
+                      var queryql = {"query":"query AccountOverviewQueries
+                      {accountOverview {...F0}} fragment F0 on AccountOverview
+                      {clientID,clientTotal,accounts
+                      {productName,accountTotal,productDisplayName,accountID,accountNumber,accountMailingName,isOwner,canRead,canWrite,owners
+                      {clientID,clientMailingName},funds
+                      {fundName,fundDisplayName,priceDate,dollarBalance}}}","variables":{}};
+
+
+                      console.warn('queryql obj: ' + JSON.stringify(queryql));
+
+
+
+                      //APIC: set the payload
+
+                      apim.setvariable('message.body', queryql);
+
+
+                      apim.setvariable('message.headers.content-type',
+                      'application/json');
+
+
+                      //apim.setvariable('message.body',apim.getvariable('generated-jwt'));  
+
+
+                      console.warn('### message.body: ' + 
+                      JSON.stringify(apim.getvariable('message.body')));
+                - invoke:
+                    target-url: 'https://eregistrytest.trustees.co.nz/server/api/v1/graphql'
+          otherwise: []
+          version: 1.0.0
+    catch: []
+  gateway: datapower-gateway
+paths:
+  /login:
+    post:
+      responses:
+        '200':
+          description: 200 OK
+          schema:
+            $ref: '#/definitions/token-obj'
+      parameters:
+        - name: credentials
+          required: true
+          in: body
+          schema:
+            type: object
+  /graphql-passing-query:
+    post:
+      responses:
+        '200':
+          description: 200 OK
+      parameters:
+        - name: authorization
+          type: string
+          required: true
+          in: header
+          description: Bearer token got from /login
+        - name: queryql
+          required: true
+          in: body
+          schema:
+            type: object
+          description: '{ "query":"", "variables":{} }'
+  /graphql-hardcoded-query:
+    post:
+      responses:
+        '200':
+          description: 200 OK
+      parameters:
+        - name: authorization
+          type: string
+          required: true
+          in: header
+          description: Bearer token got from /login
+  /login-passing-query:
+    post:
+      responses:
+        '200':
+          description: 200 OK
+          schema:
+            $ref: '#/definitions/credentials'
+      parameters:
+        - name: credentials
+          required: true
+          in: body
+          schema:
+            type: object
+definitions:
+  credentials:
+    properties:
+      fundManager:
+        type: string
+      username:
+        properties: {}
+        type: string
+      password:
+        properties: {}
+        type: string
+    additionalProperties: false
+  token-obj:
+    properties:
+      token:
+        type: string
+      ownsAccounts:
+        properties: {}
+        type: string
+    additionalProperties: false
+tags: []
