@@ -51,6 +51,12 @@ x-ibm-configuration:
                       console.warn('### queryql');
 
 
+                      // to force to body to be JSON
+
+                      apim.setvariable('message.headers.content-type',
+                      'application/json');
+
+
                       var queryql = {"query":"query AccountOverviewQueries
                       {accountOverview {...F0}} fragment F0 on AccountOverview
                       {clientID,clientTotal,accounts
@@ -65,11 +71,9 @@ x-ibm-configuration:
 
                       //APIC: set the payload
 
-                      apim.setvariable('message.body', queryql);
+                      apim.setvariable('message.body', JSON.stringify(queryql));
 
 
-                      apim.setvariable('message.headers.content-type',
-                      'application/json');
 
 
                       //apim.setvariable('message.body',apim.getvariable('generated-jwt'));  
@@ -79,6 +83,21 @@ x-ibm-configuration:
                       JSON.stringify(apim.getvariable('message.body')));
                 - invoke:
                     target-url: 'https://eregistrytest.trustees.co.nz/server/api/v1/graphql'
+            - operations:
+                - verb: get
+                  path: '/graphql_hardcoded-query-with-parms/{accountId}'
+              execute:
+                - gatewayscript:
+                    title: gatewayscript
+                    version: 1.0.0
+                    source: >-
+                      console.warn('### queryql');
+
+
+                      // to force to body to be JSON
+
+                      console.warn('accountId: ' +
+                      apim.getvariable('request.parameters.accountId'));
           otherwise: []
           version: 1.0.0
     catch: []
@@ -138,6 +157,20 @@ paths:
           in: body
           schema:
             type: object
+  '/graphql_hardcoded-query-with-parms/{accountId}':
+    get:
+      responses:
+        '200':
+          description: 200 OK
+    parameters:
+      - name: accountId
+        type: string
+        required: true
+        in: path
+      - name: authorization
+        type: string
+        required: true
+        in: header
 definitions:
   credentials:
     properties:
