@@ -51,6 +51,7 @@ x-ibm-configuration:
                       console.warn('### queryql');
 
 
+
                       // to force to body to be JSON
 
                       apim.setvariable('message.headers.content-type',
@@ -58,7 +59,7 @@ x-ibm-configuration:
 
 
                       var queryql = {"query":"query AccountOverviewQueries
-                      {accountOverview {...F0}} fragment F0 on AccountOverview
+                      {accountOverview { ...F0 }} fragment F0 on AccountOverview
                       {clientID,clientTotal,accounts
                       {productName,accountTotal,productDisplayName,accountID,accountNumber,accountMailingName,isOwner,canRead,canWrite,owners
                       {clientID,clientMailingName},funds
@@ -83,6 +84,7 @@ x-ibm-configuration:
                       JSON.stringify(apim.getvariable('message.body')));
                 - invoke:
                     target-url: 'https://eregistrytest.trustees.co.nz/server/api/v1/graphql'
+                    verb: POST
             - operations:
                 - verb: get
                   path: '/graphql_hardcoded-query-with-parms/{accountId}'
@@ -92,6 +94,12 @@ x-ibm-configuration:
                     version: 1.0.0
                     source: >-
                       console.warn('### queryql');
+
+
+
+                      console.warn("{Hey { ...F0 }}");
+
+                      //console.warn('{accountOverview');
 
 
                       // to force to body to be JSON

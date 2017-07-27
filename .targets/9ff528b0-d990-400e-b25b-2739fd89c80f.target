@@ -1,0 +1,82 @@
+type: bluemix
+server:
+  displayName: Sydney
+  name: au-syd
+  host: au.apiconnect.ibmcloud.com
+org:
+  id: 5961ea600cf29fbbc9777f91
+  name: giovanninzibmcom-apic-pot
+  displayName: giovanni@nz.ibm.com (apic-pot)
+  orgType: apiProvider
+  status: active
+  advPortalOverride: true
+  extUaaAuthenticated: false
+  requiresSSLClientCertCheck: false
+  dormant: false
+  url: 'https://au.apiconnect.ibmcloud.com/v1/orgs/5961ea600cf29fbbc9777f91'
+  externalOrgId: 24912939-71df-4343-9ee2-f7d1a75e1daa
+  externalInviteOverride: 'https://console.au-syd.bluemix.net/apis/catalog/invitation'
+  externalSpaceId: 24912939-71df-4343-9ee2-f7d1a75e1daa
+  externalNativeOrgId: f9b853ea-4ee3-48b8-a8db-dc8552ed1bd9
+  bluemix:
+    inviteUri: 'https://console.au-syd.bluemix.net/apis/catalog/invitation'
+    organization: f9b853ea-4ee3-48b8-a8db-dc8552ed1bd9
+    space: 24912939-71df-4343-9ee2-f7d1a75e1daa
+catalog:
+  id: 5961ea610cf29fbbc9777f9d
+  orgId: 5961ea600cf29fbbc9777f91
+  name: Sandbox
+  shortName: sb
+  owner:
+    id: 56fb0a410cf2c3132e22358e
+    username: giovanni@nz.ibm.com
+    context: apimanager
+    idpId: 58309060d537926087f383a5
+    email: giovanni@nz.ibm.com
+    firstName: GIOVANNI VIGORELLI
+    lastName: ''
+    status: ACTIVE
+    lastLoginTime: '2017-07-17T10:19:43.943+0000'
+    url: 'https://au.apiconnect.ibmcloud.com/v1/users/56fb0a410cf2c3132e22358e'
+  apiCenter: false
+  portalType: ADVANCED
+  portalUrl: 'https://developer.au.apiconnect.ibmcloud.com/giovanninzibmcom-apic-pot/sb'
+  customPortalUrl: 'https://developer.au.apiconnect.ibmcloud.com/giovanninzibmcom-apic-pot/sb'
+  advPortalUrl: 'https://sb-giovanninzibmcom-apic-pot.developer.au.apiconnect.ibmcloud.com'
+  gatewayType: DataPowerGateway
+  gwServices:
+    - id: PRODAPIC_APIMGMT_GATEWAY
+      endpointUrl: 'https://api.au.apiconnect.ibmcloud.com/giovanninzibmcom-apic-pot/sb'
+  idp: 5961ea610cf29fbbc9777f9e
+  idps:
+    - 5961ea610cf29fbbc9777f9e
+  availableRoles:
+    - viewer
+    - developer
+  default: false
+  autoDeploy: true
+  restrictedDeployment: false
+  invitationEnabled: true
+  selfSignUpEnabled: true
+  spaceEnabled: false
+  spaceIds:
+    - 5961ea610cf29fbbc9777fa6
+  testAppEnabled: true
+  testAppCredentials:
+    clientId: 43d2976a-fdfb-4ec4-a8c9-cd4dcd8d3113
+    clientSecret: T5dJ7jC1gK4nL2pJ8jO5kS8kB7kT4sU2gO7rL8vR1jL8eY6hX1
+  createdAt: '2017-07-09T08:33:37.353+0000'
+  updatedAt: '2017-07-09T10:13:45.275+0000'
+  createdBy: apim-ops@wwpdl.vnet.ibm.com
+  updatedBy: giovanni@nz.ibm.com
+  url: >-
+    https://au.apiconnect.ibmcloud.com/v1/orgs/5961ea600cf29fbbc9777f91/environments/5961ea610cf29fbbc9777f9d
+  applicationLifecycleEnabled: false
+  productDeploymentApprovalRequiredStates: []
+  orgName: giovanninzibmcom-apic-pot
+space:
+  none: true
+app:
+  none: true
+id: 9ff528b0-d990-400e-b25b-2739fd89c80f
+target: 1.0.0
